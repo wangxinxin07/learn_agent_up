@@ -1,5 +1,6 @@
 package com.wxx.learn;
 
+import com.wxx.learn.log.MyLog;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtBehavior;
@@ -18,7 +19,7 @@ public class PerformMonitorTransformer implements ClassFileTransformer {
     private static final Set<String> classNameSet = new HashSet<>();
 
     static {
-        classNameSet.add("com.wxx.learn.AgentTest");
+//        classNameSet.add("com.wxx.learn.AgentTest");
     }
 
     @Override
@@ -29,9 +30,13 @@ public class PerformMonitorTransformer implements ClassFileTransformer {
                             byte[] classfileBuffer) throws IllegalClassFormatException {
         try {
             String currentClassName = className.replaceAll("/", ".");
-            if (!classNameSet.contains(currentClassName)) { // 仅仅提升Set中含有的类
+//            if (!classNameSet.contains(currentClassName)) { // 仅仅提升Set中含有的类
+//                return null;
+//            }
+            if (!currentClassName.contains("com.intellij")) {
                 return null;
             }
+            MyLog.log("transform: [" + currentClassName + "]");
             System.out.println("transform: [" + currentClassName + "]");
 
             CtClass ctClass = ClassPool.getDefault().get(currentClassName);
